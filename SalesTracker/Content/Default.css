@@ -1,0 +1,29 @@
+﻿body {
+    background-image: url('../Areas/Sales/Content/Login.jpg');
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-color: #eeeeee;
+    text-align: center;
+}
+
+.container .card {
+    border-width: 2px;
+    border-color: darkgray;
+    margin-top: 150px;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+input {
+    margin: 10px;
+    border: none;
+    outline-color:gray;
+    background-color: #eeeeee;
+    padding: 5px 100px 5px 5px;
+    border-radius: 25px;
+}
+label{
+    float: left;
+    margin: 10px auto auto 50px;
+}

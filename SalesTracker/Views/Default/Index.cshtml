@@ -1,0 +1,39 @@
+﻿
+@{
+    /**/
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/Areas/Sales/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/Default.css" />
+</head>
+<body >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card col-4 ">
+                <div class="card-header">
+                    <h2>Login</h2>
+                </div>
+                <div class="card-body">
+                    <form action="@Url.Action("Login", "Default")" method="post">
+                        <label for="username">User name:</label>
+                        <input type="text" id="username" placeholder="User name" /><br />
+                        <label for="password" >Password:</label><br />
+                        <input type="password" id="password" placeholder="Password" /><br />
+
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </form>
+                    <hr />
+                    <b></b><a href="#">Forgot password?</a></b>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

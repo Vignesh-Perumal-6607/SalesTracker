@@ -1,0 +1,306 @@
+﻿@model IEnumerable<SalesTracker.Areas.Sales.Models.Service>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Sales/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Areas/Sales/Scripts/StyleSheet.css" />
+
+<h2>#Invoice</h2>
+
+<panel>
+    <div>
+        <div class="disp">
+            <span class="padd">
+                <label>
+                    Cus.Name
+                </label>
+            </span>
+            <span class="padd" style="padding-left:5%;">
+                <input type="text" name="CusName" class="">
+            </span>
+            <span class="padd" style="padding-left:1%;">
+                <label>
+                    Mobile
+                </label>
+            </span>
+            <span class="padd">
+                <input type="text" name="Mobile">
+            </span>
+
+            <span class="padd" style="padding-left:1%">
+                <label>Area</label>
+            </span>
+            <span class="padd" style="padding-left:1%">
+                <input type="text" id="Area" name="Area" />
+            </span>
+            <br />
+            <br />
+        </div>
+
+        <div class="disp">
+            <span class="padd">
+                <label>
+                    Customer Type
+                </label>
+            </span>
+            <span class="padd">
+                <Select id="CusType" name="CusType">
+                    <option value="0" align="center">--Select--</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Normal">Normal</option>
+                </Select>
+            </span>
+            <span class="padd">
+                <label>Service</label>
+            </span>
+            <span class="padd">
+                <Select id="Service_Type" name="Service_Type">
+                    <option value="0" align="center">--Select--</option>
+                    <option>Hair cut</option>
+                    <option>Shave</option>
+                    <option>Facial</option>
+                </Select>
+            </span>
+            <span class="padd">
+                <label>Qty</label>
+            </span>
+
+            <span class="padd">
+                <input type="text" id="Quantity" name="Quantity" />
+            </span>
+            <span class="padd">
+                <input type="submit" value="Add" class="button" onclick="SalesRecord()" /> <br /><br />
+            </span>
+        </div>
+
+
+    </div>
+</panel>
+<div><br /></div>
+
+<!-- The loader element -->
+<div class="image-container loader">
+    <img class="loader" src="~/Areas/Sales/Content/sissor.gif">
+</div>
+
+@*</form>*@
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Service type</th>
+        <th>
+            @Html.DisplayNameFor(model => model.CusType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+
+        <th>
+
+        </th>
+
+    </tr>
+    @{
+        int i = 0;
+    }
+    @foreach (var item in Model)
+    {
+        i += 1;
+        <tr>
+            <td>
+                <label>
+                    @Html.DisplayFor(modelItem => item.Service_Type, new { id = "Service_Type" + @i })
+                </label>
+            </td>
+            <td>
+                <label>
+                    @Html.DisplayFor(modelItem => item.CusType)
+                </label>
+            </td>
+            <td>
+                <label id='Rate@(i)'>
+                    @Html.DisplayFor(modelItem => item.Rate)
+                </label>
+            </td>
+            <td>
+
+                @Html.TextBoxFor(modelItem => item.Quantity, new { id = "Qty" + @i, @onblur = "onblurActions(" + @i + ")" })
+
+            </td>
+            <td>
+
+                @Html.TextBoxFor(modelItem => item.Amount, new { id = "Amt" + @i, @onblur = "onblurAmount("+@i+")" })
+
+            </td>
+
+            <td><button onclick="removeRow(this)" class="btn-danger rmvBtn">Remove</button></td>
+        </tr>
+
+    }
+</table>
+<div class="navbar navbar-inverse navbar-fixed-bottom">
+    <div class="navbar-header">
+    </div>
+    <div class="footer">
+        <button onclick="Total(@i)" class="button" style=" width: 70%;">Total</button>
+        <div class="txtTot">
+            <input type="text" id="TotalAmt" autocomplete="off"/>
+        </div>
+        <span class="btnPrint">
+            <button class="button">Print</button>
+        </span>
+    </div>
+</div>
+<script>
+
+    function SalesRecord() {
+        const loader = document.querySelector(".loader");
+
+        var Quantity = document.getElementById("Quantity").value;
+        var CusType = document.getElementById("CusType").value;
+        var Service_Type = document.getElementById("Service_Type").value;
+
+        $.ajax({
+            url: 'Invoice/Index',
+            type: 'POST',
+            data: { Quantity: Quantity, CusType: CusType, Service_Type: Service_Type },
+            success: function (valid) {
+                if (valid) {
+                    //alert(valid);
+                    //show that id is valid
+                } else {
+                    //show that id is not valid
+                }
+            }
+        });
+        window.location.reload();
+        window.addEventListener('load', (event) => {
+            alert('The page has fully loaded');
+            Total();   
+            // Your code here (e.g., manipulate DOM elements, perform actions)
+        });
+            //document.getElementById("TotalAmt").value = localStorage.getItem('totalCount');
+    }
+    
+    window.onload = function () {
+        const loader = document.querySelector(".loader");
+
+        setInterval(function () {
+            loader.style.display = "none";
+        },0)// Hide the loader
+        document.getElementById("TotalAmt").value = localStorage.getItem('totalCount');
+    }
+        @*if (window.performance.navigation.type === 1) {
+           window.location.href = '@Url.Action("ClearTempData", "SalesInvoice")';
+        }*@
+
+        function onblurActions(id) {
+
+            var qty = parseFloat(document.getElementById("Qty" + id).value);
+            var rate = parseFloat(document.getElementById("Rate" + id).innerText);
+            var tot = qty * rate;
+            var con = qty + "," + tot;
+            document.getElementById("Amt" + id).value = qty * rate;
+
+            $.ajax({
+                url: 'Invoice/resetDataTable',
+                type: 'POST',
+                data: { button: id, ReSetType: "UPDATE", Qty: con },
+                success: function (valid) {
+                    if (valid) {
+                        //show that id is valid
+                    } else {
+                        //show that id is not valid
+                    }
+                }
+            });
+            
+            window.location.reload();
+
+            
+            Total();
+            //alert(Number(totalCount.toFixed(1))
+            // alert(totalCount )
+           
+            
+        }
+     function onblurAmount(AmtId) {
+         var qty = parseFloat(document.getElementById("Qty" + AmtId).value);
+         var Amt = parseFloat(document.getElementById("Amt" + AmtId).value);
+         var con = qty + "," + Amt;
+        $.ajax({
+                url: 'Invoice/resetDataTable',
+                type: 'POST',
+            data: { button: AmtId, ReSetType: "UPDATE", Qty: con },
+                success: function (valid) {
+                    if (valid) {
+                        //show that id is valid
+                    } else {
+                        //show that id is not valid
+                    }
+                }
+            });
+            
+            window.location.reload();
+
+            
+            Total();
+    }
+    function removeRow(button) {
+        const loader = document.querySelector(".loader");
+            //count += 1;
+            // Find the parent row (tr) of the clicked button
+            var row = button.parentNode.parentNode;
+
+
+            // Find the parent table
+            var table = row.parentNode;
+            //alert(row.rowIndex);
+            var index = row.rowIndex
+            //var url = "/Invoice/resetDataTable?button=" + index;
+            // Remove the row from the table
+            table.removeChild(row);
+
+            $.ajax({
+                url: 'Invoice/resetDataTable',
+                type: 'POST',
+                data: { button: index, ReSetType: "REMOVE"},
+                success: function (valid) {
+                    if (valid) {
+                        //show that id is valid
+                    } else {
+                        //show that id is not valid
+                    }
+                }
+            });
+            // Navigate to the URL
+            //window.location.href = url;
+            window.location.reload();
+        
+        Total();
+        }
+
+    function Total() {
+        var totCnt = @Model.Count();
+        var totalCount = 0;
+
+        for (var i = 1; i <= (totCnt); i++) {
+            if (document.getElementById("Amt" + i) !== null) {
+                totalCount += Math.round(parseFloat(document.getElementById("Amt" + i).value));
+            }
+        }
+        //alert(Number(totalCount.toFixed(1))
+        // alert(totalCount )
+        localStorage.setItem("totalCount", totalCount);
+        document.getElementById("TotalAmt").value = totalCount;//Math.round(totalCount*100)/100;
+    }
+
+
+</script>

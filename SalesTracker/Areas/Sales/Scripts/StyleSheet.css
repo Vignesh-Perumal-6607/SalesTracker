@@ -1,0 +1,176 @@
+﻿body {
+}
+
+.navbar-inverse {
+    background-image: url('../Content/navbar pattern1.png');
+    border-color: transparent;
+}
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: white;
+        font-size: medium;
+        font-family: inherit;
+    }
+
+        .navbar-inverse .navbar-nav > li > a:hover,
+        .navbar-inverse .navbar-nav > li > a:focus {
+            color: #fff;
+            background-color: transparent;
+            border: solid;
+        }
+
+label {
+    color: #000000;
+}
+
+.user-pic {
+    float: right;
+}
+
+.icon {
+    border-radius: 50px;
+    padding-top: 3px;
+}
+
+a {
+    color: white;
+}
+
+    a:hover {
+        color: #fff;
+    }
+
+.bgchnpro {
+    background-color: rgba(239, 239, 239, 0.70);
+}
+
+.font {
+    font-family: Arial;
+}
+
+.slides {
+    max-height: 30vh;
+}
+
+.outlinenone {
+    outline: none;
+    border: none;
+    background-color: #eaeaea;
+    border-radius: 25px;
+    padding:5px;
+    margin:10px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 2%;
+    display: flex;
+    /*align-items:center;
+    justify-content:space-around;*/
+    
+    padding-left:70%;
+}
+
+.disp{
+    margin-right: 1000px;
+    display: contents;
+    justify-content: space-around;
+}
+Select{
+    width:15%;
+    height:10%;
+}
+.padd {
+    padding-left: 2%;
+}
+
+.txtTot {
+    padding-left: 10%;
+}
+/* Define the initial state (hidden) */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.loader {
+    //border: 4px solid #f3f3f3; /* Light gray border */
+    //border-top: 4px solid #3498db; /* Blue border on top */
+    border-radius: 50%; /* Circular shape */
+    width: 70px;
+    height: 70px;
+    animation: spin 1.5s alternate infinite; /* Rotate animation */
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    // transform: translate(-50%, 50%);
+}
+.loader1 {
+    //border: 4px solid #f3f3f3; /* Light gray border */
+    //border-top: 4px solid #3498db; /* Blue border on top */
+    border-radius: 50%; /* Circular shape */
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite; /* Rotate animation */
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+}
+.image-container {
+    background-color: transparent; /* Set the background color */
+    display: inline-block; /* Adjust as needed */
+    mix-blend-mode: multiply ; /* Blend mode to make white transparent */
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.btnPrint {
+    border-radius: 10% 10%;
+    padding-left: 5%;
+}
+.button {
+    display: inline-block;
+    padding: 3px 20px;
+    background-color: #0074D9;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .button:hover {
+        background-color: #005689;
+        transform: scale(1.05);
+    }
+
+.rmvBtn {
+    display: inline-block;
+    padding: 3px 20px;
+    
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .rmvBtn:hover {
+        
+        transform: scale(1.05);
+    }

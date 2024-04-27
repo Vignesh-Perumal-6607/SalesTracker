@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "ChangeProfile";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/Areas/Sales/Content/bootstrap.min.css" />
+<link rel="stylesheet" href="~/Areas/Sales/Scripts/StyleSheet.css" />
+<body class="bgchnpro">
+    <div class="text-center">
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-4 offset-4">
+                    <div class="card">
+                        <h2 class="card-title font mt-3">Change profile</h2>
+                        <hr>
+                        <img class="card-img-top" src="@(Session["Profile"].ToString())">
+                        <div><input type="file" class="btn btn-dark mt-3"></div>
+                        <div class="pb-3">
+                            <a class="btn btn-link mt-3" href="/Sales/SalesTracker">Cancel</a>
+                            <button class="btn btn-primary mt-3">Update!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
