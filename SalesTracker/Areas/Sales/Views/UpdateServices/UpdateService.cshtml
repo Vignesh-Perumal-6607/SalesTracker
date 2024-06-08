@@ -1,0 +1,143 @@
+﻿@model SalesTracker.Areas.Sales.Models.Service
+
+@{
+    ViewBag.Title = "UpdateService";
+    Layout = "~/Areas/Sales/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info">
+        <strong>Information!</strong> @TempData["InfoMessage"]
+        <button class="close" data-dismiss="alert" aria-label="Close">
+            <span>&times;</span>
+        </button>
+    </div>
+}
+else if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success!</strong> @TempData["SuccessMessage"]
+        <button class="close" data-dismiss="alert" aria-label="Close">
+            <span>&times;</span>
+        </button>
+    </div>
+}
+else if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> @TempData["ErrorMessage"]
+        <button class="close" data-dismiss="alert" aria-label="Close">
+            <span>&times;</span>
+        </button>
+    </div>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+            $(document).ready(function () {
+                $.ajax({
+                    url: '@Url.Action("ServiceDrop", "Invoice")',
+                    type: 'GET',
+                    success: function (data) {
+                        // Populate the dropdown with the data returned from the controller
+                        var selectList = $('<select>').attr('id', 'Service_Type').addClass('form-control').on('blur', function sel()
+                        {
+                            var selectedValue = $(this).val();
+                            console.log('Selected value:', selectedValue);
+
+                    $.ajax({
+                        url: '@Url.Action("SelectServiceValue", "UpdateServiceDetails")',
+                        type: 'Post',
+                        data: { Service_Type: selectedValue },
+                        success: function (valid) {
+                            if (valid) {
+                                // Show that the ID is valid
+                                console.log('ID is valid');
+                                // You can update the UI here to reflect the validity
+                            } else {
+                                // Show that the ID is not valid
+                                console.log('ID is not valid');
+                                // You can update the UI here to reflect the invalidity
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Error occurred:', textStatus, errorThrown);
+                            // Handle error scenarios here
+                        }
+                    });
+                        });
+                        $.each(data, function (index, item) {
+                            selectList.append($('<option>').attr('value', item.Value).text(item.Text));
+                        });
+                        $('#ServiceDropdownContainer').html(selectList);
+                    }
+                });
+    });
+</script>
+
+<h2>View</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>InvoiceEntities</h4>
+    <hr />
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Service_Type, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div id="ServiceDropdownContainer" class="col-md-10">
+
+            <!-- Dropdown will be inserted here -->
+        </div>
+
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Service_Type, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Service_Type, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Service_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Service_ID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Service_ID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Service_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control" } })
+            @*@Html.ValidationMessageFor(model => model.Service_ID, "", new { @class = "text-danger" })*@
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+
+            @*@Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })*@
+        </div>
+    </div>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

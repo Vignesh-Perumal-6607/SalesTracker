@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SalesTracker.Areas.Sales.Models.Service>
+﻿@*@model IEnumerable<SalesTracker.Areas.Sales.ViewModel.CompositeModel>*@
+@model IEnumerable<SalesTracker.Areas.Sales.Models.Service>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Sales/Views/Shared/_Layout.cshtml";
@@ -7,74 +8,111 @@
 <link rel="stylesheet" href="~/Areas/Sales/Scripts/StyleSheet.css" />
 
 <h2>#Invoice</h2>
-
+   
 <panel>
-    <div>
-        <div class="disp">
-            <span class="padd">
-                <label>
-                    Cus.Name
-                </label>
-            </span>
-            <span class="padd" style="padding-left:5%;">
-                <input type="text" name="CusName" class="">
-            </span>
-            <span class="padd" style="padding-left:1%;">
-                <label>
-                    Mobile
-                </label>
-            </span>
-            <span class="padd">
-                <input type="text" name="Mobile">
-            </span>
+    <div class="table-sm">
 
-            <span class="padd" style="padding-left:1%">
-                <label>Area</label>
-            </span>
-            <span class="padd" style="padding-left:1%">
-                <input type="text" id="Area" name="Area" />
-            </span>
-            <br />
-            <br />
-        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        <div class="disp">
-            <span class="padd">
-                <label>
-                    Customer Type
-                </label>
-            </span>
-            <span class="padd">
-                <Select id="CusType" name="CusType">
-                    <option value="0" align="center">--Select--</option>
-                    <option value="Premium">Premium</option>
-                    <option value="Normal">Normal</option>
-                </Select>
-            </span>
-            <span class="padd">
-                <label>Service</label>
-            </span>
-            <span class="padd">
-                <Select id="Service_Type" name="Service_Type">
-                    <option value="0" align="center">--Select--</option>
-                    <option>Hair cut</option>
-                    <option>Shave</option>
-                    <option>Facial</option>
-                </Select>
-            </span>
-            <span class="padd">
-                <label>Qty</label>
-            </span>
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    url: '@Url.Action("ServiceDrop", "Invoice")',
+                    type: 'GET',
+                    success: function (data) {
+                        // Populate the dropdown with the data returned from the controller
+                        var selectList = $('<select>').attr('id', 'Service_Type').addClass('form-control');
+                        $.each(data, function (index, item) {
+                            selectList.append($('<option>').attr('value', item.Value).text(item.Text));
+                        });
+                        $('#ServiceDropdownContainer').html(selectList);
+                    }
+                });
+            });
 
-            <span class="padd">
-                <input type="text" id="Quantity" name="Quantity" />
-            </span>
-            <span class="padd">
-                <input type="submit" value="Add" class="button" onclick="SalesRecord()" /> <br /><br />
-            </span>
-        </div>
+            @*$(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("CustemerType", "Invoice")',
+            type: 'GET',
+            success: function (data) {
+                // Populate the dropdown with the data returned from the controller
+                var selectList = $('<select>').attr('id', 'Service_Type').addClass('form-control');
+                $.each(data, function (index, item) {
+                    selectList.append($('<option>').attr('value', item.Value).text(item.Text));
+                });
+                $('#CustomDropdownContainer').html(selectList);
+            }
+        });*@
+       
+    //});
+        </script>
+        <table class="table d-xxl-table-row">
+            <tbody>
+                <tr>
+                   <td >
+                        @*@Html.TextBoxFor(model => model.Service_Type, new { id = "txtPlace", Value = "3" })*@
+                        <label>
+                            Cus.Name
+                        </label>
 
+                        <input type="text" name="CusName" class="form-control">
+                    </td>
 
+                    <td>
+                        <label>
+                            Mobile
+                        </label>
+
+                        <input type="text" name="Mobile" class="form-control">
+                    </td>
+                    <td>
+                        <label>Area</label>
+
+                        <input type="text" id="Area" name="Area" class="form-control"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Customer Type
+                        </label>
+                        @*<div id="CustomDropdownContainer">
+
+                        </div>*@
+
+                        </div>
+                    
+                        <Select id="CusType" name="CusType" class="form-control">
+                            <option value="0" align="center">--Select--</option>
+                            <option value="Premium">Premium</option>
+                            <option value="Normal">Normal</option>
+                        </Select>
+                   
+                    </td>
+                    <td>
+                        <label>
+                            Service Type
+                        </label>
+                        <div id="ServiceDropdownContainer">
+                            <!-- Dropdown will be inserted here -->
+                        </div>
+                    </td>
+                    <td>
+                        <label>Qty</label>
+                        <input type="text" id="Quantity" name="Quantity" class="form-control" />
+                    </td>
+                    <div>
+                        <br />
+                        <br />
+                        <td>
+                            <input type="submit" value="Add" class="button" onclick="SalesRecord()" />
+
+                        </td>
+                    </div>
+
+                </tr>
+            </tbody>
+        </table>
     </div>
 </panel>
 <div><br /></div>
@@ -110,9 +148,11 @@
     @{
         int i = 0;
     }
-    @foreach (var item in Model)
+    @if (Model != null)
     {
-        i += 1;
+        foreach (var item in Model)
+        {
+            i += 1;
         <tr>
             <td>
                 <label>
@@ -136,13 +176,14 @@
             </td>
             <td>
 
-                @Html.TextBoxFor(modelItem => item.Amount, new { id = "Amt" + @i, @onblur = "onblurAmount("+@i+")" })
+                @Html.TextBoxFor(modelItem => item.Amount, new { id = "Amt" + @i, @onblur = "onblurAmount(" + @i + ")" })
 
             </td>
 
             <td><button onclick="removeRow(this)" class="btn-danger rmvBtn">Remove</button></td>
         </tr>
 
+        }
     }
 </table>
 <div class="navbar navbar-inverse navbar-fixed-bottom">
@@ -151,7 +192,7 @@
     <div class="footer">
         <button onclick="Total(@i)" class="button" style=" width: 70%;">Total</button>
         <div class="txtTot">
-            <input type="text" id="TotalAmt" autocomplete="off"/>
+            <input type="text" id="TotalAmt" autocomplete="off" />
         </div>
         <span class="btnPrint">
             <button class="button">Print</button>
@@ -183,12 +224,12 @@
         window.location.reload();
         window.addEventListener('load', (event) => {
             alert('The page has fully loaded');
-            Total();   
+            Total();
             // Your code here (e.g., manipulate DOM elements, perform actions)
         });
             //document.getElementById("TotalAmt").value = localStorage.getItem('totalCount');
     }
-    
+
     window.onload = function () {
         const loader = document.querySelector(".loader");
 
@@ -196,6 +237,7 @@
             loader.style.display = "none";
         },0)// Hide the loader
         document.getElementById("TotalAmt").value = localStorage.getItem('totalCount');
+       
     }
         @*if (window.performance.navigation.type === 1) {
            window.location.href = '@Url.Action("ClearTempData", "SalesInvoice")';
@@ -221,15 +263,15 @@
                     }
                 }
             });
-            
+
             window.location.reload();
 
-            
+
             Total();
             //alert(Number(totalCount.toFixed(1))
             // alert(totalCount )
-           
-            
+
+
         }
      function onblurAmount(AmtId) {
          var qty = parseFloat(document.getElementById("Qty" + AmtId).value);
@@ -247,10 +289,10 @@
                     }
                 }
             });
-            
+
             window.location.reload();
 
-            
+
             Total();
     }
     function removeRow(button) {
@@ -283,24 +325,27 @@
             // Navigate to the URL
             //window.location.href = url;
             window.location.reload();
-        
+
         Total();
         }
 
     function Total() {
-        var totCnt = @Model.Count();
-        var totalCount = 0;
+        
+            var totCnt = @Model.Count();
+            var totalCount = 0;
 
-        for (var i = 1; i <= (totCnt); i++) {
-            if (document.getElementById("Amt" + i) !== null) {
-                totalCount += Math.round(parseFloat(document.getElementById("Amt" + i).value));
+            for (var i = 1; i <= (totCnt); i++) {
+                if (document.getElementById("Amt" + i) !== null) {
+                    totalCount += Math.round(parseFloat(document.getElementById("Amt" + i).value));
+                }
             }
-        }
-        //alert(Number(totalCount.toFixed(1))
-        // alert(totalCount )
-        localStorage.setItem("totalCount", totalCount);
-        document.getElementById("TotalAmt").value = totalCount;//Math.round(totalCount*100)/100;
+            //alert(Number(totalCount.toFixed(1))
+            // alert(totalCount )
+            localStorage.setItem("totalCount", totalCount);
+            document.getElementById("TotalAmt").value = totalCount;//Math.round(totalCount*100)/100;
+        
     }
+    
 
 
 </script>

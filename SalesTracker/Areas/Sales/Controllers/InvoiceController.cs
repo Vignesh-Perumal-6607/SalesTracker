@@ -7,11 +7,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SalesTracker.Areas.Sales.Models;
-
+using SalesTracker.Areas.Sales.ViewModel;
 namespace SalesTracker.Areas.Sales.Controllers
 {
     public class InvoiceController : Controller
     {
+        //private readonly ApplicationDbContext _context;
         SqlConnection con = new SqlConnection();
         SqlCommand com = new SqlCommand();
         //connection string
@@ -112,6 +113,81 @@ namespace SalesTracker.Areas.Sales.Controllers
             TempData["ActionExecuted"] = true;
             return View("Invoice", lstRows);
         }
-        
+
+        [HttpGet]
+        public ActionResult ServiceDrop()
+        {
+            try
+            {
+                // Fetch distinct Service_Type values from the database
+                List<SelectListItem> serviceTypes = new List<SelectListItem>();
+                // Pass the list to your view  
+                
+                connectionString();
+                con.Open();
+                com.Connection = con;
+                com.CommandText = "select * from TBLService_details";
+                //dr = com.ExecuteReader();
+                
+                SqlDataAdapter sqlDA = new SqlDataAdapter(com);
+                DataTable dtPeople = new DataTable();
+                
+                sqlDA.Fill(dtPeople);
+                con.Close();
+                
+                foreach (DataRow dr in dtPeople.Rows)
+                {
+
+                    serviceTypes.Add( new SelectListItem { 
+                        //Service_ID = dr["Service_ID"].ToString(),
+                        Value = dr["Service_Type"].ToString(),
+                        Text = dr["Service_Type"].ToString()
+                    });
+
+                }
+                
+
+                return Json(serviceTypes, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult CustemerType()
+        {
+            try
+            {
+                List<SelectListItem> CusType = new List<SelectListItem>();
+
+                connectionString();
+                con.Open();
+                com.Connection = con;
+                com.CommandText = "Select * from TBLService_details";
+                DataTable DtCusType = new DataTable();
+                SqlDataAdapter sqlDBA = new SqlDataAdapter(com);
+                sqlDBA.Fill(DtCusType);
+                con.Close();
+                foreach (DataRow dr in DtCusType.Rows)
+                {
+
+                    CusType.Add(new SelectListItem
+                    {
+                        //Service_ID = dr["Service_ID"].ToString(),
+                        Value = dr["Service_Type"].ToString(),
+                        Text = dr["Service_Type"].ToString()
+                    });
+
+                }
+                return Json(CusType, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View();
+        }
     }
 }

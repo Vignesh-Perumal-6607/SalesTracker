@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace SalesTracker.Areas.Sales.Models
 {
-    public class InvoiceEntities
-    {
-
-    }
     public class Service
     {
         [Key]
@@ -25,4 +22,5 @@ namespace SalesTracker.Areas.Sales.Models
         [Required]
         public string Amount { get; set; }
     }
+    
 }
